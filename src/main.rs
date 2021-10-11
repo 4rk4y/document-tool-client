@@ -12,12 +12,15 @@ use yew::{
 enum Msg {
     Request,
     Response(Result<Vec<Page>, Error>),
+    Title(String),
+    AddPage,
 }
 
 struct Main {
     link: ComponentLink<Self>,
     fetch_task: Option<FetchTask>,
     pages: Option<Vec<Page>>,
+    title: String,
 }
 
 #[derive(Deserialize)]
@@ -36,6 +39,7 @@ impl Component for Main {
             link,
             fetch_task: None,
             pages: None,
+            title: String::new(),
         }
     }
 
@@ -61,6 +65,24 @@ impl Component for Main {
                     self.pages = Some(body)
                 }
             }
+            Msg::Title(value) => {
+                self.title = value;
+            }
+            Msg::AddPage => {
+                self.fetch_task = Some(
+                    FetchService::fetch(
+                        yew::services::fetch::Request::post(format!(
+                            "http://127.0.0.1:8000?_title={}",
+                            self.title
+                        ))
+                        .body(Nothing)
+                        .unwrap(),
+                        self.link
+                            .callback(|_response: Response<Result<String, Error>>| Msg::Request),
+                    )
+                    .unwrap(),
+                );
+            }
         }
         true
     }
@@ -70,13 +92,34 @@ impl Component for Main {
     }
 
     fn view(&self) -> Html {
+        let title_callback = self
+            .link
+            .callback(|event: InputData| Msg::Title(event.value));
+
+        let add_page = self.link.callback(|_| Msg::AddPage);
+
         match &self.pages {
             Some(pages) => html! {
-              <div>{"Pages:"}{
-                pages.iter().map(|page| html! {
-                  <div>{"id: "}{&page.id}{", title: "}{&page.title}</div>
-                }).collect::<Html>()
-              }</div>
+                <div>
+                    <form>
+                        <label for="title">{"Title: "}</label>
+                        <input
+                            id="title"
+                            type="text"
+                            value={self.title.clone()}
+                            oninput=title_callback
+                        />
+                    </form>
+                    <button onclick=add_page>{"Add page"}</button>
+                    <br/><br/>
+                    <div>
+                    {"Pages:"}{
+                        pages.iter().map(|page| html! {
+                            <div>{"id: "}{&page.id}{", title: "}{&page.title}</div>
+                        }).collect::<Html>()
+                    }
+                    </div>
+                </div>
             },
             None => html! {
               <div>{"No data"}</div>
