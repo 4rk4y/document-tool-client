@@ -82,6 +82,8 @@ dependencies = [
  "anyhow",
  "serde",
  "yew",
+ "yewdux",
+ "yewtil",
 ]
 
 [[package]]
@@ -306,6 +308,8 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "632f73e236b219150ea279196e54e610f5dbafa5d61786303d4da54f84e47fce"
 dependencies = [
  "cfg-if 1.0.0",
+ "serde",
+ "serde_json",
  "wasm-bindgen-macro",
 ]
 
@@ -414,4 +418,27 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
+]
+
+[[package]]
+name = "yewdux"
+version = "0.6.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5015d52c6ceef13ff148af73b6258d5d8df401b1f9b039ec9fdc622d04166be1"
+dependencies = [
+ "serde",
+ "yew",
+]
+
+[[package]]
+name = "yewtil"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8543663ac49cd613df079282a1d8bdbdebdad6e02bac229f870fd4237b5d9aaa"
+dependencies = [
+ "log",
+ "wasm-bindgen",
+ "wasm-bindgen-futures",
+ "web-sys",
+ "yew",
 ]
