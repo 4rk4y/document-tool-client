@@ -8,6 +8,11 @@ use yew::{
         FetchService,
     },
 };
+mod store;
+
+use store::*;
+use yewdux::prelude::*;
+use yewtil::NeqAssign;
 
 enum Msg {
     Request,
@@ -17,6 +22,7 @@ enum Msg {
 }
 
 struct Main {
+    dispatch: StoreDispatchProps,
     link: ComponentLink<Self>,
     fetch_task: Option<FetchTask>,
     pages: Option<Vec<Page>>,
@@ -31,11 +37,12 @@ struct Page {
 
 impl Component for Main {
     type Message = Msg;
-    type Properties = ();
+    type Properties = StoreDispatchProps;
 
-    fn create(_props: Self::Properties, link: ComponentLink<Self>) -> Self {
+    fn create(dispatch: Self::Properties, link: ComponentLink<Self>) -> Self {
         link.send_message(Msg::Request);
         Self {
+            dispatch,
             link,
             fetch_task: None,
             pages: None,
@@ -87,8 +94,8 @@ impl Component for Main {
         true
     }
 
-    fn change(&mut self, _props: Self::Properties) -> ShouldRender {
-        false
+    fn change(&mut self, dispatch: Self::Properties) -> ShouldRender {
+        self.dispatch.neq_assign(dispatch)
     }
 
     fn view(&self) -> Html {
@@ -98,9 +105,16 @@ impl Component for Main {
 
         let add_page = self.link.callback(|_| Msg::AddPage);
 
+        let is_true = self.dispatch.state().is_true;
+        let toggle = self.dispatch.callback(|_| Action::Toggle);
+
         match &self.pages {
             Some(pages) => html! {
                 <div>
+                    {is_true}
+                    <br/>
+                    <button onclick=toggle>{"Store test: toggle"}</button>
+                    <br/><br/>
                     <form>
                         <label for="title">{"Title: "}</label>
                         <input
@@ -129,5 +143,5 @@ impl Component for Main {
 }
 
 fn main() {
-    yew::start_app::<Main>();
+    yew::start_app::<WithDispatch<Main>>();
 }
