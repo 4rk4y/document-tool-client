@@ -1,5 +1,6 @@
 use anyhow::Error;
 use serde::Deserialize;
+use store::*;
 use yew::{
     format::{Json, Nothing},
     prelude::*,
@@ -8,11 +9,11 @@ use yew::{
         FetchService,
     },
 };
-mod store;
-
-use store::*;
 use yewdux::prelude::*;
 use yewtil::NeqAssign;
+
+mod store;
+mod sub_store;
 
 enum Msg {
     Request,
@@ -105,8 +106,10 @@ impl Component for Main {
 
         let add_page = self.link.callback(|_| Msg::AddPage);
 
-        let is_true = self.dispatch.state().is_true;
-        let toggle = self.dispatch.callback(|_| Action::Toggle);
+        let is_true = self.dispatch.state().sub_store.is_true;
+        let toggle = self
+            .dispatch
+            .callback(|_| Action::SubStoreAction(sub_store::Action::Toggle));
 
         match &self.pages {
             Some(pages) => html! {
