@@ -1,7 +1,8 @@
 use super::sub_store;
 use yewdux::prelude::*;
 
-pub type StoreDispatchProps = DispatchProps<ReducerStore<Store>>;
+pub type Storage = ReducerStore<Store>;
+pub type StoreDispatchProps = DispatchProps<Storage>;
 
 #[derive(Clone)]
 pub struct Store {

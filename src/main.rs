@@ -12,6 +12,7 @@ use yew::{
 use yewdux::prelude::*;
 use yewtil::NeqAssign;
 
+mod page;
 mod store;
 mod sub_store;
 
@@ -130,11 +131,27 @@ impl Component for Main {
                     <button onclick=add_page>{"Add page"}</button>
                     <br/><br/>
                     <div>
-                    {"Pages:"}{
-                        pages.iter().map(|page| html! {
-                            <div>{"id: "}{&page.id}{", title: "}{&page.title}</div>
-                        }).collect::<Html>()
-                    }
+                        {"Pages:"}{
+                            pages.iter().map(|page| html! {
+                                <div>{"id: "}{&page.id}{", title: "}{&page.title}</div>
+                            }).collect::<Html>()
+                        }
+                    </div>
+                    <br/>
+                    <div>
+                        {"Page:"}{
+                            match pages.first() {
+                                Some(page) => html! {
+                                    <page::PageWithDispatch
+                                        dispatch={DispatchProps::default()}
+                                        id={page.id}
+                                    />
+                                },
+                                None => html! {
+                                    <div>{"No data"}</div>
+                                },
+                            }
+                        }
                     </div>
                 </div>
             },
