@@ -6,6 +6,7 @@ use yew_router::*;
 use yewdux::prelude::*;
 use yewtil::NeqAssign;
 
+mod element;
 mod page;
 mod page_list;
 mod store;

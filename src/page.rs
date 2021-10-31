@@ -1,3 +1,4 @@
+use super::element;
 use super::store::*;
 use anyhow::Error;
 use serde::Deserialize;
@@ -118,19 +119,19 @@ impl Component for Page {
                     {format!("id: {}, title: {}", page_details.id, page_details.title)}<br/><br/>
                     {"Elements:"}{
                         page_details.elements.iter().map(|element| html! {
-                            <div>
-                                {format!("id: {},", element.id)}<br/>
-                                {format!("page_id: {},", element.page_id)}<br/>
-                                {format!("width: {},", element.width)}<br/>
-                                {format!("height: {},", element.height)}<br/>
-                                {format!("top: {},", element.top)}<br/>
-                                {format!("right: {},", element.right)}<br/>
-                                {format!("bottom: {},", element.bottom)}<br/>
-                                {format!("left: {},", element.left)}<br/>
-                                {format!("align: {},", element.align)}<br/>
-                                {format!("data_type: {},", element.data_type)}<br/>
-                                {format!("data: {},", element.data)}<br/><br/>
-                            </div>
+                            <element::Element
+                                id={element.id}
+                                page_id={element.page_id}
+                                width={element.width}
+                                height={element.height}
+                                top={element.top}
+                                right={element.right}
+                                bottom={element.bottom}
+                                left={element.left}
+                                align={element.align}
+                                data_type={element.data_type}
+                                data={element.data.to_string()}
+                            />
                         }).collect::<Html>()
                     }
                 </div>
