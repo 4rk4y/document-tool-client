@@ -1,4 +1,5 @@
-use super::page;
+use super::MainRoute;
+use super::MainRouterAnchor;
 use anyhow::Error;
 use serde::Deserialize;
 use yew::{
@@ -9,7 +10,6 @@ use yew::{
         FetchService,
     },
 };
-use yewdux::prelude::*;
 
 pub enum Msg {
     Request,
@@ -117,24 +117,14 @@ impl Component for PageList {
                     <div>
                         {"Pages:"}{
                             pages.iter().map(|page| html! {
-                                <div>{"id: "}{&page.id}{", title: "}{&page.title}</div>
+                                <div>
+                                    {"id: "}{page.id}
+                                    {", title: "}
+                                    <MainRouterAnchor route=MainRoute::Page(page.id)>
+                                        {&page.title}
+                                    </MainRouterAnchor>
+                                </div>
                             }).collect::<Html>()
-                        }
-                    </div>
-                    <br/>
-                    <div>
-                        {"Page:"}{
-                            match pages.first() {
-                                Some(page) => html! {
-                                    <page::PageWithDispatch
-                                        dispatch={DispatchProps::default()}
-                                        id={page.id}
-                                    />
-                                },
-                                None => html! {
-                                    <div>{"No data"}</div>
-                                },
-                            }
                         }
                     </div>
                 </>
