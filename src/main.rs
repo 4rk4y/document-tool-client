@@ -43,17 +43,8 @@ impl Component for Main {
     }
 
     fn view(&self) -> Html {
-        let is_true = self.dispatch.state().sub_store.is_true;
-        let toggle = self
-            .dispatch
-            .callback(|_| Action::SubStoreAction(sub_store::Action::Toggle));
-
         html! {
             <div>
-                {is_true}
-                <br/>
-                <button onclick=toggle>{"Store test: toggle"}</button>
-                <br/><br/>
                 <MainRouterAnchor route=MainRoute::Main>{"Main"}</MainRouterAnchor>
                 <br/><br/>
                 <Router<MainRoute>
