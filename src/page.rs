@@ -117,7 +117,7 @@ impl Component for Page {
                 <div>
                     {"Page:"}<br/>
                     {format!("id: {}, title: {}", page_details.id, page_details.title)}<br/><br/>
-                    {"Elements:"}{
+                    {
                         page_details.elements.iter().map(|element| html! {
                             <element::Element
                                 id={element.id}

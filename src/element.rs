@@ -56,27 +56,67 @@ impl Component for Element {
 
     fn view(&self) -> Html {
         html! {
-            <div>
-                {format!("id: {},", self.props.id)}<br/>
-                {format!("page_id: {},", self.props.page_id)}<br/>
-                {format!("width: {},", self.props.width)}<br/>
-                {format!("height: {},", self.props.height)}<br/>
-                {format!("top: {},", self.props.top)}<br/>
-                {format!("right: {},", self.props.right)}<br/>
-                {format!("bottom: {},", self.props.bottom)}<br/>
-                {format!("left: {},", self.props.left)}<br/>
-                {format!("align: {},", self.props.align)}<br/>
-                {format!("data_type: {},", self.props.data_type)}<br/>
-                {format!("Data type: {}",
-                    match DataType::try_from(self.props.data_type) {
-                        Ok(DataType::Image) => "image",
-                        Ok(DataType::Link) => "link",
-                        Ok(DataType::Text) => "text",
-                        Err(()) => "no such data type",
-                    })
-                }<br/>
-                {format!("data: {},", self.props.data)}<br/><br/>
-            </div>
+            match DataType::try_from(self.props.data_type) {
+                Ok(DataType::Image) => html! {<>{"image"}</>},
+                Ok(DataType::Link) => html! {<>{"link"}</>},
+                Ok(DataType::Text) => {
+                    let width = match self.props.width {
+                        0.0 => "".to_string(),
+                        width => format!("width: {}px;", width),
+                    };
+
+                    let height = match self.props.height {
+                        0.0 => "".to_string(),
+                        height => format!("height: {}px;", height),
+                    };
+
+                    let top = match self.props.top {
+                        0.0 => "".to_string(),
+                        top => format!("margin-top: {}px;", top),
+                    };
+                    let right = match self.props.right {
+                        0.0 => "".to_string(),
+                        right => format!("margin-right: {}px;", right),
+                    };
+
+                    let bottom = match self.props.bottom {
+                        0.0 => "".to_string(),
+                        bottom => format!("margin-bottom: {}px;", bottom),
+                    };
+
+                    let left = match self.props.left {
+                        0.0 => "".to_string(),
+                        left => format!("margin-left: {}px;", left),
+                    };
+
+                    let align = format!(
+                        "text-align: {};",
+                        match self.props.align {
+                            0 => "center",
+                            1 => "inherit",
+                            2 => "justify",
+                            3 => "left",
+                            4 => "right",
+                            _ => "",
+                        }
+                    );
+
+                    html! {
+                        <div style=format!("{}{}{}{}{}{}{}",
+                            width,
+                            height,
+                            top,
+                            right,
+                            bottom,
+                            left,
+                            align,
+                        )>
+                            {self.props.data.to_string()}
+                        </div>
+                    }
+                },
+                Err(()) => html! {<>{"no such data type"}</>},
+            }
         }
     }
 }
