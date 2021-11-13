@@ -108,6 +108,10 @@ impl Component for Page {
     }
 
     fn change(&mut self, props: Self::Properties) -> ShouldRender {
+        if self.props.id != props.id {
+            self.props.id = props.id;
+            self.link.send_message(Msg::Request);
+        }
         self.props.dispatch.neq_assign(props.dispatch)
     }
 

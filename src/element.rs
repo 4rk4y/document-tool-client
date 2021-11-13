@@ -1,8 +1,10 @@
+use super::MainRoute;
+use super::MainRouterAnchor;
 use yew::prelude::*;
 
 enum DataType {
     Image = 0,
-    Link,
+    PageRoute,
     Text,
 }
 
@@ -12,7 +14,7 @@ impl TryFrom<i32> for DataType {
     fn try_from(value: i32) -> Result<Self, Self::Error> {
         match value {
             value if value == 0 => Ok(Self::Image),
-            value if value == 1 => Ok(Self::Link),
+            value if value == 1 => Ok(Self::PageRoute),
             value if value == 2 => Ok(Self::Text),
             _ => Err(()),
         }
@@ -50,7 +52,11 @@ impl Component for Element {
         true
     }
 
-    fn change(&mut self, _props: Self::Properties) -> ShouldRender {
+    fn change(&mut self, props: Self::Properties) -> ShouldRender {
+        if self.props.id != props.id {
+            self.props = props;
+            return true;
+        }
         false
     }
 
@@ -58,7 +64,30 @@ impl Component for Element {
         html! {
             match DataType::try_from(self.props.data_type) {
                 Ok(DataType::Image) => html! {<>{"image"}</>},
-                Ok(DataType::Link) => html! {<>{"link"}</>},
+                Ok(DataType::PageRoute) => {
+                    let mut data = self.props.data.split(",");
+
+                    let id: &str = match data.next() {
+                        Some(id) => id,
+                        None => return html! {},
+                    };
+
+                    let id: i32 = match id.parse() {
+                        Ok(id) => id,
+                        Err(_) => return html! {},
+                    };
+
+                    let title: &str = match data.next() {
+                        Some(title) => title,
+                        None => return html! {},
+                    };
+
+                    html! {
+                        <MainRouterAnchor route=MainRoute::Page(id)>
+                            {title}
+                        </MainRouterAnchor>
+                    }
+                },
                 Ok(DataType::Text) => {
                     let width = match self.props.width {
                         0.0 => "".to_string(),
