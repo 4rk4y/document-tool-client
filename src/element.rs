@@ -83,9 +83,9 @@ impl Component for Element {
                     };
 
                     html! {
-                        <MainRouterAnchor route=MainRoute::Page(id)>
-                            {title}
-                        </MainRouterAnchor>
+                        <div>
+                            <MainRouterAnchor route=MainRoute::Page(id)>{title}</MainRouterAnchor>
+                        </div>
                     }
                 },
                 Ok(DataType::Text) => {

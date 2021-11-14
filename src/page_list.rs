@@ -94,32 +94,32 @@ impl Component for PageList {
     }
 
     fn view(&self) -> Html {
-        let title_callback = self
-            .link
-            .callback(|event: InputData| Msg::Title(event.value));
+        // let title_callback = self
+        //     .link
+        //     .callback(|event: InputData| Msg::Title(event.value));
 
-        let add_page = self.link.callback(|_| Msg::AddPage);
+        // let add_page = self.link.callback(|_| Msg::AddPage);
 
         match &self.pages {
             Some(pages) => html! {
                 <>
-                    <form>
-                        <label for="title">{"Title: "}</label>
-                        <input
-                            id="title"
-                            type="text"
-                            value={self.title.clone()}
-                            oninput=title_callback
-                        />
-                    </form>
-                    <button onclick=add_page>{"Add page"}</button>
-                    <br/><br/>
+                    <br/>
+                    // <form>
+                    //     <label for="title">{"Title: "}</label>
+                    //     <input
+                    //         id="title"
+                    //         type="text"
+                    //         value={self.title.clone()}
+                    //         oninput=title_callback
+                    //     />
+                    // </form>
+                    // <button onclick=add_page>{"Add page"}</button>
+                    // <br/><br/>
                     <div>
-                        {"Pages:"}{
+                        <div style="font-size: 25px;">{"Pages:"}</div>
+                        {
                             pages.iter().map(|page| html! {
-                                <div>
-                                    {"id: "}{page.id}
-                                    {", title: "}
+                                <div style="font-size: 20px;">
                                     <MainRouterAnchor route=MainRoute::Page(page.id)>
                                         {&page.title}
                                     </MainRouterAnchor>
