@@ -119,8 +119,7 @@ impl Component for Page {
         match &self.page_details {
             Some(page_details) => html! {
                 <div>
-                    {"Page:"}<br/>
-                    {format!("id: {}, title: {}", page_details.id, page_details.title)}<br/><br/>
+                    <h1>{page_details.title.to_string()}</h1>
                     {
                         page_details.elements.iter().map(|element| html! {
                             <element::Element

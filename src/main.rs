@@ -44,22 +44,26 @@ impl Component for Main {
 
     fn view(&self) -> Html {
         html! {
-            <div>
-                <MainRouterAnchor route=MainRoute::Main>{"Main"}</MainRouterAnchor>
-                <br/><br/>
-                <Router<MainRoute>
-                    render = Router::render(|switch: MainRoute| {
-                        match switch {
-                            MainRoute::Main => html! {<page_list::PageList/>},
-                            MainRoute::Page(id) => html! {
-                                <page::PageWithDispatch
-                                    dispatch={DispatchProps::default()}
-                                    id={id}
-                                />
-                            },
-                        }
-                    })
-                />
+            <div style="display: flex; justify-content: center;">
+                <div style="width: 800px;">
+                    <div style="display: flex; justify-content: space-between; font-size: 20px;">
+                        <MainRouterAnchor route=MainRoute::Page(1)>{"Main"}</MainRouterAnchor>
+                        <MainRouterAnchor route=MainRoute::Main>{"All pages"}</MainRouterAnchor>
+                    </div>
+                    <Router<MainRoute>
+                        render = Router::render(|switch: MainRoute| {
+                            match switch {
+                                MainRoute::Main => html! {<page_list::PageList/>},
+                                MainRoute::Page(id) => html! {
+                                    <page::PageWithDispatch
+                                        dispatch={DispatchProps::default()}
+                                        id={id}
+                                    />
+                                },
+                            }
+                        })
+                    />
+                </div>
             </div>
         }
     }
